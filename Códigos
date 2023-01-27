@@ -1,0 +1,27 @@
+# A class for handling user authentication
+class Authentication:
+    def __init__(self):
+        self.users = {}
+    
+    def register_user(self, username, password):
+        # Hash the password for security
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        self.users[username] = hashed_password
+        
+    def login(self, username, password):
+        # Check if the username is in the users dictionary
+        if username in self.users:
+            # Get the hashed password for the user
+            hashed_password = self.users[username]
+            # Check if the provided password matches the hashed password
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password):
+                return True
+        return False
+
+# Use the class
+auth = Authentication()
+auth.register_user("johndoe", "password123")
+if auth.login("johndoe", "password123"):
+    print("Login successful")
+else:
+    print("Invalid login")
